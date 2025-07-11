@@ -1,0 +1,65 @@
+-- 1 Mostrar todos los usuarios registrados
+
+SELECT id, primerNom, segundoNom, primerApe, segundoApe, correo
+FROM Usuario;
+
+-- 2 Mostrar todos los álbumes con su dueño
+
+SELECT a.id, a.titulo, a.año, a.medio, u.primerNom, u.primerApe
+FROM Album as a
+INNER JOIN Usuario as u ON a.usuario_id = u.id;
+
+-- 3 Mostrar todas las canciones con su intérprete
+
+SELECT c.titulo, c.duracion_min, c.duracion_seg, a.nombre AS interpreteCancion
+FROM Cancion as c
+INNER JOIN Artista as a ON c.interprete_id = a.id;
+
+-- 4 Listar las canciones de un álbum específico
+
+SELECT ac.album_id,c.titulo, c.duracion_min, c.duracion_seg
+FROM Album_Cancion as ac
+INNER JOIN Cancion as c ON ac.cancion_id = c.id
+WHERE ac.album_id = 1;
+
+-- 5 Listar los álbumes donde participó un artista específico
+
+SELECT art.nombre as artista,abm.titulo as tituloAlbum, abm.año, abm.medio
+FROM Album_Artista as aa
+INNER JOIN Album as abm ON aa.album_id = abm.id
+iNNER JOIN artista as art on aa.artista_id = art.id
+WHERE art.nombre = "Queen";
+
+-- 6 Mostrar las canciones con duración mayor a 4 minutos
+
+SELECT titulo, duracion_min, duracion_seg
+FROM Cancion
+WHERE duracion_min > 4;
+
+-- 7 Mostrar los álbumes grabados en formato "Vinilo"
+
+SELECT titulo, año, medio
+FROM Album
+WHERE medio = 'Vinilo';
+
+-- 8 Mostrar todos los artistas y cuántos álbumes tienen asociados
+
+SELECT a.nombre, COUNT(aa.album_id) AS total_albumes
+FROM Artista as a
+INNER JOIN Album_Artista as aa ON a.id = aa.artista_id
+GROUP BY a.id, a.nombre;
+
+-- 9 Mostrar los usuarios y cuántos álbumes ha registrado cada uno
+
+SELECT u.primerNom, u.primerApe, COUNT(a.id) AS total_albumes
+FROM Usuario as u
+LEFT JOIN Album as a ON u.id = a.usuario_id
+GROUP BY u.id, u.primerNom, u.primerApe;
+
+-- 10 Mostrar todas las canciones del álbum "25"
+
+SELECT a.titulo,c.titulo
+FROM Album as a
+INNER JOIN Album_Cancion as ac ON a.id = ac.album_id
+INNER JOIN Cancion as c ON c.id = ac.cancion_id
+WHERE a.titulo = '25';
