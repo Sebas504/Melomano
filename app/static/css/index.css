@@ -1,0 +1,30 @@
+/* Estilos del menu */
+.row {
+  background-color: black;
+}
+
+.col-botton {
+  padding: 3px;
+  border: solid 2px black;
+  border-radius: 5px;
+  background-color: rgba(119, 0, 186, 255);
+  text-align: center;
+}
+
+.btn,
+.dropdown-menu {
+  width: 100%;
+}
+
+.dropdown-btn {
+  border: solid 1px white;
+  background-color: rgba(119, 0, 186, 255);
+  text-align: center;
+  width: 100%;
+}
+/* Hasta aqui */
+.img-perso {
+  border-radius: 10px;
+  width: 1580px;
+  height: 763px;
+}

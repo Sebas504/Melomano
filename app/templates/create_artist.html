@@ -1,0 +1,45 @@
+{% extends "base.html" %} {% block content %}
+<h1 class="mb-4">Crear Nuevo Artista</h1>
+<style>
+  body {
+    background-color: black; /* Fondo negro para toda la página */
+    color: white; /* Texto blanco para contraste */
+  }
+  .card {
+    background-color: rgba(108, 1, 177, 1); /* Fondo morado para las tarjetas */
+    border: none; /* Sin borde */
+  }
+  .card-header {
+    background-color: rgba(
+      108,
+      1,
+      177,
+      0.8
+    ); /* Fondo morado más claro para el encabezado */
+    color: white; /* Texto blanco en el encabezado */
+  }
+  .btn {
+    background-color: rgba(108, 1, 177, 1); /* Botones morados */
+    color: white; /* Texto blanco en los botones */
+  }
+  .btn:hover {
+    background-color: rgba(108, 1, 177, 0.8); /* Efecto hover más claro */
+  }
+</style>
+<form method="POST" action="{{ url_for('artist_bp.create_artist') }}">
+  <div class="mb-3">
+    <label for="nombre" class="form-label">Nombre del Artista</label>
+    <input
+      type="text"
+      class="form-control"
+      id="nombre"
+      name="nombre"
+      required
+    />
+  </div>
+  <button type="submit" class="btn btn-success">Crear Artista</button>
+  <a href="{{ url_for('artist_bp.manage_artists') }}" class="btn btn-secondary"
+    >Cancelar</a
+  >
+</form>
+{% endblock %}

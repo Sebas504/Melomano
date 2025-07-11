@@ -1,0 +1,77 @@
+{% extends "base.html" %} {% block content %}
+<h1 class="mb-4">Crear Nueva Canción</h1>
+<style>
+  body {
+    background-color: black; /* Fondo negro para toda la página */
+    color: white; /* Texto blanco para contraste */
+  }
+  .card {
+    background-color: rgba(108, 1, 177, 1); /* Fondo morado para las tarjetas */
+    border: none; /* Sin borde */
+  }
+  .card-header {
+    background-color: rgba(
+      108,
+      1,
+      177,
+      0.8
+    ); /* Fondo morado más claro para el encabezado */
+    color: white; /* Texto blanco en el encabezado */
+  }
+  .btn {
+    background-color: rgba(108, 1, 177, 1); /* Botones morados */
+    color: white; /* Texto blanco en los botones */
+  }
+  .btn:hover {
+    background-color: rgba(108, 1, 177, 0.8); /* Efecto hover más claro */
+  }
+</style>
+<form method="POST" action="{{ url_for('song_bp.create_song') }}">
+  <div class="mb-3">
+    <label for="titulo" class="form-label">Título</label>
+    <input
+      type="text"
+      class="form-control"
+      id="titulo"
+      name="titulo"
+      required
+    />
+  </div>
+  <div class="mb-3">
+    <label for="duracion_min" class="form-label">Duración (Minutos)</label>
+    <input
+      type="number"
+      class="form-control"
+      id="duracion_min"
+      name="duracion_min"
+      min="0"
+      required
+    />
+  </div>
+  <div class="mb-3">
+    <label for="duracion_seg" class="form-label">Duración (Segundos)</label>
+    <input
+      type="number"
+      class="form-control"
+      id="duracion_seg"
+      name="duracion_seg"
+      min="0"
+      max="59"
+      required
+    />
+  </div>
+  <div class="mb-3">
+    <label for="interprete_id" class="form-label">Intérprete</label>
+    <select class="form-select" id="interprete_id" name="interprete_id">
+      <option value="">Seleccionar Intérprete (Opcional)</option>
+      {% for artist in artists %}
+      <option value="{{ artist.id }}">{{ artist.nombre }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <button type="submit" class="btn btn-success">Crear Canción</button>
+  <a href="{{ url_for('song_bp.manage_songs') }}" class="btn btn-secondary"
+    >Cancelar</a
+  >
+</form>
+{% endblock %}
