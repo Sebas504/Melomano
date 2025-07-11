@@ -1,0 +1,182 @@
+{% extends "base.html" %} {% block content %}
+<h1 class="mb-4">Detalles del Álbum: {{ album.titulo }}</h1>
+<style>
+  body {
+    background-color: black; /* Fondo negro para toda la página */
+    color: white; /* Texto blanco para contraste */
+  }
+  .card {
+    background-color: rgba(108, 1, 177, 1); /* Fondo morado para las tarjetas */
+    border: none; /* Sin borde */
+  }
+  .card-header {
+    background-color: rgba(
+      108,
+      1,
+      177,
+      0.8
+    ); /* Fondo morado más claro para el encabezado */
+    color: white; /* Texto blanco en el encabezado */
+  }
+  .btn {
+    background-color: rgba(108, 1, 177, 1); /* Botones morados */
+    color: white; /* Texto blanco en los botones */
+  }
+  .btn:hover {
+    background-color: rgba(108, 1, 177, 0.8); /* Efecto hover más claro */
+  }
+
+  p {
+    color: white;
+  }
+</style>
+
+<div class="card mb-4">
+  <div class="card-header">Información del Álbum</div>
+  <div class="card-body">
+    <p><strong>ID:</strong> {{ album.id }}</p>
+    <p><strong>Título:</strong> {{ album.titulo }}</p>
+    <p><strong>Año:</strong> {{ album.año }}</p>
+    <p>
+      <strong>Descripción:</strong> {{ album.descripcion if album.descripcion
+      else 'N/A' }}
+    </p>
+    <p><strong>Medio:</strong> {{ album.medio }}</p>
+    <p>
+      <strong>Usuario Propietario:</strong> {{ album.usuario_name if
+      album.usuario_name else 'N/A' }}
+    </p>
+    <a
+      href="{{ url_for('album_bp.edit_album', album_id=album.id) }}"
+      class="btn btn-warning btn-sm"
+      >Editar Álbum</a
+    >
+    <a
+      href="{{ url_for('album_bp.manage_albums') }}"
+      class="btn btn-secondary btn-sm"
+      >Volver a Álbumes</a
+    >
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="card mb-4">
+      <div class="card-header">Artistas del Álbum</div>
+      <div class="card-body">
+        {% if artists %}
+        <ul class="list-group mb-3">
+          {% for artist in artists %}
+          <li
+            class="list-group-item d-flex justify-content-between align-items-center"
+          >
+            {{ artist.nombre }}
+            <form
+              action="{{ url_for('album_bp.remove_artist_from_album_route', album_id=album.id, artista_id=artist.id) }}"
+              method="POST"
+              style="display: inline"
+            >
+              <button type="submit" class="btn btn-danger btn-sm">
+                Quitar
+              </button>
+            </form>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p>No hay artistas asociados a este álbum.</p>
+        {% endif %}
+
+        <h5 class="mt-4">Añadir Artista</h5>
+        <form
+          action="{{ url_for('album_bp.add_artist_to_album_route', album_id=album.id) }}"
+          method="POST"
+        >
+          <div class="input-group mb-3">
+            <select class="form-select" name="artista_id" required>
+              <option value="">Seleccionar Artista</option>
+              {% set associated_artist_ids = [] %} {# Inicializar la lista vacía
+              #} {% for artist in artists %} {% if artist.id not in
+              associated_artist_ids %} {% set associated_artist_ids =
+              associated_artist_ids + [artist.id] %} {# Agregar el ID del
+              artista a la lista #} {% endif %} {% endfor %} {% for artist in
+              all_artists %} {% if artist.id not in associated_artist_ids %} {#
+              Verificar si el artista no está asociado #}
+              <option value="{{ artist.id }}">{{ artist.nombre }}</option>
+              {% endif %} {% endfor %}
+            </select>
+            <button class="btn btn-primary" type="submit">Añadir</button>
+          </div>
+        </form>
+        <a
+          href="{{ url_for('artist_bp.manage_artists') }}"
+          class="btn btn-link btn-sm"
+          >Gestionar Artistas</a
+        >
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card mb-4">
+      <div class="card-header">Canciones del Álbum</div>
+      <div class="card-body">
+        {% if songs %}
+        <ul class="list-group mb-3">
+          {% for song in songs %}
+          <li
+            class="list-group-item d-flex justify-content-between align-items-center"
+          >
+            {{ song.titulo }} ({{ song.duracion_min }}:{{ '%02d' |
+            format(song.duracion_seg) }}) - {{ song.interprete_name if
+            song.interprete_name else 'N/A' }}
+            <form
+              action="{{ url_for('album_bp.remove_song_from_album_route', album_id=album.id, cancion_id=song.id) }}"
+              method="POST"
+              style="display: inline"
+            >
+              <button type="submit" class="btn btn-danger btn-sm">
+                Quitar
+              </button>
+            </form>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p>No hay canciones asociadas a este álbum.</p>
+        {% endif %}
+
+        <h5 class="mt-4">Añadir Canción</h5>
+        <form
+          action="{{ url_for('album_bp.add_song_to_album_route', album_id=album.id) }}"
+          method="POST"
+        >
+          <div class="input-group mb-3">
+            <select class="form-select" name="cancion_id" required>
+              <option value="">Seleccionar Canción</option>
+              {% set associated_song_ids = [] %} {# Inicializar la lista vacía
+              #} {% for song in songs %} {% if song.id not in
+              associated_song_ids %} {% set associated_song_ids =
+              associated_song_ids + [song.id] %} {# Agregar el ID de la canción
+              a la lista #} {% endif %} {% endfor %} {% for song in all_songs %}
+              {% if song.id not in associated_song_ids %} {# Verificar si la
+              canción no está asociada #}
+              <option value="{{ song.id }}">
+                {{ song.titulo }} ({{ song.duracion_min }}:{{ '%02d' |
+                format(song.duracion_seg) }})
+              </option>
+              {% endif %} {% endfor %}
+            </select>
+            <button class="btn btn-primary" type="submit">Añadir</button>
+          </div>
+        </form>
+        <a
+          href="{{ url_for('song_bp.manage_songs') }}"
+          class="btn btn-link btn-sm"
+          >Gestionar Canciones</a
+        >
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

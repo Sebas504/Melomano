@@ -1,0 +1,77 @@
+{% extends "base.html" %} {% block content %}
+<h1 class="mb-4">Crear Nuevo Álbum</h1>
+<style>
+  body {
+    background-color: black; /* Fondo negro para toda la página */
+    color: white; /* Texto blanco para contraste */
+  }
+  .card {
+    background-color: rgba(108, 1, 177, 1); /* Fondo morado para las tarjetas */
+    border: none; /* Sin borde */
+  }
+  .card-header {
+    background-color: rgba(
+      108,
+      1,
+      177,
+      0.8
+    ); /* Fondo morado más claro para el encabezado */
+    color: white; /* Texto blanco en el encabezado */
+  }
+  .btn {
+    background-color: rgba(108, 1, 177, 1); /* Botones morados */
+    color: white; /* Texto blanco en los botones */
+  }
+  .btn:hover {
+    background-color: rgba(108, 1, 177, 0.8); /* Efecto hover más claro */
+  }
+</style>
+<form method="POST" action="{{ url_for('album_bp.create_album') }}">
+  <div class="mb-3">
+    <label for="titulo" class="form-label">Título</label>
+    <input
+      type="text"
+      class="form-control"
+      id="titulo"
+      name="titulo"
+      required
+    />
+  </div>
+  <div class="mb-3">
+    <label for="año" class="form-label">Año</label>
+    <input type="number" class="form-control" id="año" name="año" required />
+  </div>
+  <div class="mb-3">
+    <label for="descripcion" class="form-label">Descripción</label>
+    <textarea
+      class="form-control"
+      id="descripcion"
+      name="descripcion"
+      rows="3"
+    ></textarea>
+  </div>
+  <div class="mb-3">
+    <label for="medio" class="form-label">Medio</label>
+    <select class="form-select" id="medio" name="medio" required>
+      <option value="CD">CD</option>
+      <option value="Cassette">Cassette</option>
+      <option value="Vinilo">Vinilo</option>
+      <option value="Digital">Digital</option>
+      <option value="Otro">Otro</option>
+    </select>
+  </div>
+  <div class="mb-3">
+    <label for="usuario_id" class="form-label">Usuario Propietario</label>
+    <select class="form-select" id="usuario_id" name="usuario_id">
+      <option value="">Seleccionar Usuario (Opcional)</option>
+      {% for user in users %}
+      <option value="{{ user.id }}">{{ user.name }} {{ user.apellido }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <button type="submit" class="btn btn-success">Crear Álbum</button>
+  <a href="{{ url_for('album_bp.manage_albums') }}" class="btn btn-secondary"
+    >Cancelar</a
+  >
+</form>
+{% endblock %}
